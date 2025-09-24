@@ -4,9 +4,9 @@
 #include <time.h>
 
 // initialize variables
-int winning_score = 5;
+int winning_score;
 
-int availableChoices = 5; // rock, paper, scissor, spock, lizard
+int availableChoices; // rock, paper, scissor, spock, lizard
 
 int Your_score = 0;
 int bot_score = 0;
@@ -58,10 +58,19 @@ int calculateWinner(int A, int B)
     return 0;
 }
 
-
-
 int game()
 {
+
+    // get number of choices
+    do
+    {
+        //        clear_input_buffer();
+        printf_s("How many choices do you want to play with? (uneven number): ");
+        scanf_s("%d", &availableChoices);
+    } while (availableChoices % 2 == 0);
+
+    printf_s("You chose to play with %d choices\n", availableChoices);
+
     clear_input_buffer();
     printf_s("how many points to win?: ");
 
