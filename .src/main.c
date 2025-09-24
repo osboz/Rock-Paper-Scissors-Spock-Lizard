@@ -3,9 +3,6 @@
 #include <string.h>
 #include <time.h>
 
-
-#define Test 100
-
 // initialize variables
 int winning_score = 5;
 
