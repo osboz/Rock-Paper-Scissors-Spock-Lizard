@@ -20,12 +20,12 @@ Expectations:
 - can handle wrong input both in the menu and gameplay, e.g., by showing an error message
     - in case you know EOF: you don’t have to handle it
 
--if a player reaches the WINNING_SCORE
+- if a player reaches the WINNING_SCORE
     - then this player wins
     - the program exits.
 
 
-### Sample interaction
-```
-- 
-```
+## changes
+
+- bot can also win if it reaches WINNING_SCORE
+
