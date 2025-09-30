@@ -1,10 +1,10 @@
 # Rock paper scissors Spock lizard opgave
 
 Draw a flowchart for this [problem](#problem).
-> flowchart : [Flowchart](flowchart_RPPSC.png)
+> Flowchart : [Flowchart](flowchart_RPPSC.png)
 
 Make code to solve the [problem](#problem)
-> da code : [code](.src/main.c)
+> Da code : [code](.src/main.c)
 
 ---
 
@@ -13,19 +13,19 @@ You must have played Rock paper scissors in your childhood. In this problem, we 
 
 Expectations:
 
-- has an entry menu
-- the agent can play randomly
-- shows score after each shape comparison
+- Has an entry menu
+- The agent can play randomly
+- Shows score after each shape comparison
 
-- can handle wrong input both in the menu and gameplay, e.g., by showing an error message
-    - in case you know EOF: you don’t have to handle it
+- Can handle wrong input both in the menu and gameplay, e.g., by showing an error message
+    - In case you know EOF: you don’t have to handle it
 
-- if a player reaches the WINNING_SCORE
-    - then this player wins
-    - the program exits.
+- If a player reaches the WINNING_SCORE
+    - Then this player wins
+    - The program exits.
 
 
-## changes
+## Changes
 
-- bot can also win if it reaches WINNING_SCORE
+- Bot can also win if it reaches WINNING_SCORE
 
