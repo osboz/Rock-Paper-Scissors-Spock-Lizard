@@ -2,29 +2,82 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 // initialize variables
-int winning_score;
+int winning_score;    // score needed to win the game
+int availableChoices; // number of choices in the game
 
-int availableChoices; // rock, paper, scissor, spock, lizard
-
-int Your_score = 0;
-int bot_score = 0;
-
-const char *choices[] = {"rock", "paper", "scissor", "spock", "lizard"};
-/*
-int game(void);
-int gameRound(void);
-int botChoice(void);
-int calculateWinner(int A, int B);
-void clear_input_buffer(void);
-*/
+int Your_score;
+int bot_score;
 
 // function to clear the input buffer
-void clear_input_buffer()
+void clearInputBuffer()
 {
     while ((getchar()) != '\n')
         ;
+}
+
+// Function to check if the input matches a given option
+int checkChar(char option)
+{
+    if (getchar() == option)
+    {
+        return 1;
+        clearInputBuffer();
+    }
+    clearInputBuffer();
+    return 0;
+}
+
+// function to check if int is in range, 
+int intInRange(int min, int max, int num)
+{
+    if (num < min || num > max)
+    {
+        printf_s("invalid, Number not in between %d-%d\n", min, max);
+        return 0;
+    }
+    return 1;
+}
+
+// Function to check if input with scanf_s is an integer within a range
+int validInt()
+{
+    int num;
+    char term;
+    if (scanf("%d%c", &num, &term) != 2 || term != '\n')
+    {
+        printf("failure\n");
+        return 0;
+    }
+    else
+    {
+        printf("valid integer followed by enter key\n");
+        return 1;
+    }
+}
+// Function to get an integer, // from https://stackoverflow.com/questions/1648043/how-to-check-if-input-is-an-integer-in-c
+int getInt(const char *question, const char *error)
+{
+    int num;
+    char term;
+    while (1)
+    {
+        if (question != NULL)
+        {
+            printf("%s", question);
+        }
+        if (scanf("%d%c", &num, &term) == 2 && term == '\n')
+        {
+            return num;
+        }
+        if (error != NULL)
+        {
+            printf("%s\n", error);
+        }
+        clearInputBuffer();
+    }
 }
 
 int botChoice()
@@ -35,7 +88,7 @@ int botChoice()
 // function to determine the winner of a round
 int calculateWinner(int A, int B)
 {
-    printf_s("You chose: %s, Bot chose: %s\n", choices[A], choices[B]);
+    printf_s("You chose: %d <-> Bot chose: %d\n", A, B);
     // A is player, B is bot
     if (A == B)
     {
@@ -43,58 +96,62 @@ int calculateWinner(int A, int B)
         return 0;
     }
 
-    // make A always greater than B to not have out of bound errors
-    A += availableChoices;
-
-    if (A == B + 1 || A == B + 3)
+    // Player wins if (A - B) is odd
+    if ((A - B) % 2 == 1)
     {
         printf("You win this round!\n");
         Your_score++;
-        return 0;
+        return 1;
     }
 
-    printf("Bot wins this round!\n\n");
+    printf("Bot wins this round!\n");
     bot_score++;
     return 0;
 }
 
+// main game function
 int game()
 {
-
+fullGameStart:
+    clearInputBuffer();
     // get number of choices
-    do
+    while (1)
     {
-        //        clear_input_buffer();
-        printf_s("How many choices do you want to play with? (uneven number): ");
-        scanf_s("%d", &availableChoices);
-    } while (availableChoices % 2 == 0);
-
+        availableChoices = getInt("Enter number of choices: ", NULL);
+        if (availableChoices > 2 && availableChoices % 2 == 1)
+            break;
+        printf_s("Invalid input. Please enter an odd number greater than 2.\n");
+    }
     printf_s("You chose to play with %d choices\n", availableChoices);
 
-    clear_input_buffer();
-    printf_s("how many points to win?: ");
-
-    winning_score = getchar() - 48; // convert char to int
-
+    // get winning score
+    while (winning_score <= 0)
+    {
+        winning_score = getInt("How many points to win?: ", "Invalid input. Please enter a whole number");
+    }
     printf_s("first to %d points wins!\n\n", winning_score);
 
-    clear_input_buffer();
-
+gameStart:
+    Your_score = 0;
+    bot_score = 0;
     // game loop
     while (1)
     {
+    loopStart:
 
-        // display choices
-        printf_s("make your choice (0-%i)\n", availableChoices - 1);
-        for (int i = 0; i < availableChoices; i++)
+        int number = 0;
+
+        char question[50];
+        snprintf(question, sizeof(question), "Make your choice (0-%i):\n\n", availableChoices - 1);
+
+        do
         {
-            printf_s("%d: %s beats --> %s,%s\n", i, choices[i], choices[(i + 1) % availableChoices], choices[(i + 2) % availableChoices]);
-        }
+            number = getInt(question, "Invalid input. Please enter a valid input");
+        } while (intInRange(0, availableChoices - 1, number) == 0);
 
-        calculateWinner(getchar() - 48, botChoice());
-        clear_input_buffer();
+        calculateWinner(number, botChoice());
 
-        printf_s("your score: %d, bots score: %d\n", Your_score, bot_score);
+        printf_s("Your score: %d <-> Bots score: %d\n", Your_score, bot_score);
 
         if (Your_score >= winning_score)
         {
@@ -109,19 +166,31 @@ int game()
             break;
         }
     }
+
+    printf_s("Do you want to play again? \nyes / no: ");
+    if (getchar() != 'y')
+    {
+        return 0;
+    }
+
+    printf_s("Do you want to use the same settings? \nyes / no: ");
+    if (getchar() != 'y')
+    {
+        goto fullGameStart;
+    }
+    goto gameStart;
+
     return 0;
 }
 
 // main function
 int main(void)
 {
-
     srand((unsigned int)time(NULL)); // seed the random number generator
 
 startpoint:
 
-    printf("Welcome to rock, paper, scissor, spock, lizard!\n (s) Single player\n (e) Exit\n Select an item: ");
-    printf("Enter a character: ");
+    printf("Welcome to rock, paper, scissor, spock, lizard! \n(s)ingle player \n(e)xit \nEnter a character: ");
 
     switch (getchar())
     {
@@ -129,6 +198,7 @@ startpoint:
     case 's':
         printf("Starting game: yay\n");
         game();
+
         break;
 
         // exit game
@@ -140,7 +210,7 @@ startpoint:
         // invalid input
     default:
         printf("Invalid input. Please try again.\n");
-        clear_input_buffer();
+        clearInputBuffer();
         goto startpoint;
         break;
     }
