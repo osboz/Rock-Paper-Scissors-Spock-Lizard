@@ -1,7 +1,7 @@
 # Rock paper scissors Spock lizard opgave
 
 Draw a flowchart for this [problem](#problem).
-> flowchart : [Flowchart](flowchartSpaceParts.png)
+> flowchart : [Flowchart](flowchart_RPPSC.png)
 
 Make code to solve the [problem](#problem)
 > da code : [code](.src/main.c)
