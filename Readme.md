@@ -27,7 +27,7 @@ Expectations:
 
 ## Changes
 
-- Player can choose how many differernt choises they want to play with.
+- Player can choose how many differernt choices they want to play with.
 - Player can choose how many points the games goes to.
 - Player can chose to play again after game is won or lost.
 - Removed Rock, Paper, Scissors, Spock and Lizard in favor of using numbers.
